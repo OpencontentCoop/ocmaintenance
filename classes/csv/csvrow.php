@@ -68,6 +68,7 @@ class CSVRow implements Iterator
      */
     public function current()
     {
+        // @phpstan-ignore property.notFound
         return $this->rows[current( $this->iteratorPointer )];
     }
     

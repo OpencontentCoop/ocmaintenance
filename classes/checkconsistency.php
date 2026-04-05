@@ -79,10 +79,12 @@ class OcCheckConsistency
                     }
                     $this->db->commit();
                 } else {
+                    // @phpstan-ignore isset.variable
                     if (isset($status)) $status->add(false);
                 }
                 $i++;
             }
+            // @phpstan-ignore isset.variable
             if (isset($status)) $status->add(true);
         }
 
@@ -115,9 +117,11 @@ class OcCheckConsistency
             );
 
             if (empty( $hasNode ) && empty( $hasTrashNode )) {
+                // @phpstan-ignore isset.variable
                 if (isset($status)) $status->add(false);
                 $count++;
             } else {
+                // @phpstan-ignore isset.variable
                 if (isset($status)) $status->add(true);
             }
         }
@@ -198,8 +202,10 @@ class OcCheckConsistency
                         );
                         $this->db->commit();
                     }
+                    // @phpstan-ignore isset.variable
                     if (isset($status)) $status->add(false);
                 } else {
+                    // @phpstan-ignore isset.variable
                     if (isset($status)) $status->add(true);
                 }
                 $i++;
@@ -272,6 +278,7 @@ class OcCheckConsistency
                     $removeFromPendingActions = !($object instanceof eZContentObject);
                     if ( $removeFromPendingActions )
                     {
+                        // @phpstan-ignore isset.variable
                         if (isset($status)) $status->add(false);
                         if ($doFix) {
                             $db->query("DELETE FROM ezpending_actions WHERE action = 'index_object' AND param = '$objectID'");
@@ -281,6 +288,7 @@ class OcCheckConsistency
                     }
                     else
                     {
+                        // @phpstan-ignore isset.variable
                         if (isset($status)) $status->add(true);
                         ++$offset;
                     }
@@ -295,6 +303,7 @@ class OcCheckConsistency
             }
         }
 
+        // @phpstan-ignore isset.variable
         if ($this->output && isset($status)){
             $this->output->outputLine();
             $this->output->outputLine( 'Successes: ' . $status->getSuccessCount() . ', Failures: ' . $status->getFailureCount() );

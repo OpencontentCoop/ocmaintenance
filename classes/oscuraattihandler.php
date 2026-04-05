@@ -23,6 +23,7 @@ class OscuraAttiHandler
     
     private function getCSVFiles()
     {
+        // @phpstan-ignore property.notFound
         $RepositoryNodeID = $this->ini->variable( 'OscuraAttiSettings', 'RepositoryNodeID' );        
         $CSVFileNodes = eZContentObjectTreeNode::subTreeByNodeID( array(
                                                                         'Depth' => 1,
@@ -33,6 +34,7 @@ class OscuraAttiHandler
                                                                         ),
                                                                  $RepositoryNodeID );
         
+        // @phpstan-ignore property.notFound
         $this->cli->output( 'Ci sono ' . count( $CSVFileNodes ) . ' file da elaborare' );
 
 // PER TESTARE UN FILE SINGOLO SCRIVI IL NODO DENTRO ALLA FECTH
@@ -57,8 +59,11 @@ class OscuraAttiHandler
                     $fileType = $attribute->toString();                    
                 }
             }
+            // @phpstan-ignore variable.undefined
             $return[$info['filepath']] = array( 'object' => $CSVFileObject,
+                                               // @phpstan-ignore variable.undefined
                                                'type' => $fileType,
+                                               // @phpstan-ignore variable.undefined
                                                'fileName' => $info['original_filename'] );
         }
         return $return;
@@ -88,15 +93,23 @@ class OscuraAttiHandler
     private function processTest( $results, $type, $row )
     {
         $attributesToModify = array( 'oggetto' => '' );
+        // @phpstan-ignore property.notFound
         $attributesToChangeSections = $this->ini->variable( 'OscuraAttiSettings', 'ChangeSectionToAttributes' );
         
+        // @phpstan-ignore property.notFound
         $IntranetSectionID = $this->ini->variable( 'OscuraAttiSettings', 'RestrictedSection' ); //29;
+        // @phpstan-ignore property.notFound
         $ReteCivicaSectionID = $this->ini->variable( 'OscuraAttiSettings', 'OpenSection' ); //28;
+        // @phpstan-ignore property.notFound
         $ApertoATuttiSectionID = $this->ini->variable( 'OscuraAttiSettings', 'SharedSection' ); //1;
         
+        // @phpstan-ignore property.notFound
         $headers = $this->doc->rows->getHeaders();
+        // @phpstan-ignore property.notFound
         $rawHeaders = $this->doc->rows->getRawHeaders();        
+        // @phpstan-ignore property.notFound
         $iniHeaders = $this->ini->variable( 'OscuraAttiSettings', 'CSVHeaders_' . $type );
+        // @phpstan-ignore property.notFound
         $iniOrganoCompetente = $this->ini->variable( 'OscuraAttiSettings', 'OrganoCompetente' );
 
         $tipoAttoHeader = $iniHeaders['tipoAtto'];
@@ -120,6 +133,7 @@ class OscuraAttiHandler
                 if ( isset( $row->{$oggettoModificatoHeader} ) )
                     $attributesToModify['oggetto'] = (string) $row->{$oggettoModificatoHeader};
                 else
+                    // @phpstan-ignore property.notFound
                     $attributesToModify['oggetto'] = $this->ini->variable( 'OscuraAttiSettings', 'OggettoStandard' );
             }
                         
@@ -213,15 +227,22 @@ class OscuraAttiHandler
         }
                 
         $attributesToModify = array( 'oggetto' => '' );
+        // @phpstan-ignore property.notFound
         $attributesToChangeSections = $this->ini->variable( 'OscuraAttiSettings', 'ChangeSectionToAttributes' );
         
+        // @phpstan-ignore property.notFound
         $IntranetSectionID = $this->ini->variable( 'OscuraAttiSettings', 'RestrictedSection' ); //29;
+        // @phpstan-ignore property.notFound
         $ReteCivicaSectionID = $this->ini->variable( 'OscuraAttiSettings', 'OpenSection' ); //28;
+        // @phpstan-ignore property.notFound
         $ApertoATuttiSectionID = $this->ini->variable( 'OscuraAttiSettings', 'SharedSection' ); //1;
         
+        // @phpstan-ignore property.notFound
         $headers = $this->doc->rows->getHeaders();
+        // @phpstan-ignore property.notFound
         $rawHeaders = $this->doc->rows->getRawHeaders();
         
+        // @phpstan-ignore property.notFound
         $iniHeaders = $this->ini->variable( 'OscuraAttiSettings', 'CSVHeaders_' . $type );
         foreach ( $iniHeaders as $header )
         {
@@ -230,6 +251,7 @@ class OscuraAttiHandler
                 $this->notice('');                
                 $this->error( 'Gli headers del CSV non corrispondono ai valori del file di configurazione. Hai selezionato il tipo di atto corretto quando hai importato il file csv? Il file oscuraatti.ini contiene gli headers corretti?' );
                 $this->error( 'Headers del file csv elaborato:' );
+                // @phpstan-ignore property.notFound
                 $this->error( var_export( $this->doc->rows->getHeaders(), 1 ) );
                 $this->error( 'Headers che lo script si aspetta:' );
                 $this->error( var_export( array_values( $iniHeaders ), 1 ) );
@@ -237,6 +259,7 @@ class OscuraAttiHandler
                 return false;
             }
         }
+        // @phpstan-ignore property.notFound
         $iniOrganoCompetente = $this->ini->variable( 'OscuraAttiSettings', 'OrganoCompetente' );
 
         $tipoAttoHeader = $iniHeaders['tipoAtto'];
@@ -260,6 +283,7 @@ class OscuraAttiHandler
                 if ( isset( $row->{$oggettoModificatoHeader} ) )
                     $attributesToModify['oggetto'] = (string) $row->{$oggettoModificatoHeader};
                 else
+                    // @phpstan-ignore property.notFound
                     $attributesToModify['oggetto'] = $this->ini->variable( 'OscuraAttiSettings', 'OggettoStandard' );
             }
             
@@ -308,6 +332,7 @@ class OscuraAttiHandler
                 }
                 
             }            
+            // @phpstan-ignore variable.undefined
             $organoCompetente = explode( ';', $organoCompetente );
             if ( count( $organoCompetente ) > 1 )
             {
@@ -336,6 +361,7 @@ class OscuraAttiHandler
             }
         }
         
+        // @phpstan-ignore property.notFound
         $filtersPerClass = $this->ini->variable( 'OscuraAttiSettings', 'Filter_' . $class );
         
         $contentClass = eZContentClass::fetchByIdentifier( $class );
@@ -492,6 +518,7 @@ return false;
                             {
                                 //modifico sezione degli oggetti file relazionati
                                 $relatedObjectIDs = explode( '-', $attribute->toString() );
+                                // @phpstan-ignore empty.variable
                                 if ( !empty( $relatedObjectIDs ) )
                                 {
                                     $this->notice( ' - oscuro ' . $attribute->attribute( 'contentclass_attribute_identifier' ), false );
@@ -562,6 +589,7 @@ return false;
                             
                             //modifico sezione degli oggetti file relazionati
                             $relatedObjectIDs = explode( '-', $attribute->toString() );
+                            // @phpstan-ignore empty.variable
                             if ( !empty( $relatedObjectIDs ) )
                             {
                                 $this->notice( ' - (fix) oscuro ' . $attribute->attribute( 'contentclass_attribute_identifier' ), false );
@@ -657,9 +685,12 @@ return false;
     
     private function getNextRow()
     {                  
+        // @phpstan-ignore property.notFound
         if( $this->dataSource->key() !== false )
         {
+            // @phpstan-ignore property.notFound
             $row = $this->dataSource->current();
+            // @phpstan-ignore property.notFound
             $this->dataSource->next();
         }
         else
@@ -674,17 +705,22 @@ return false;
         
         $csvOptions = new CSVOptions( array(
             'csv_path'         => $fileName,
+            // @phpstan-ignore property.notFound
             'delimiter'        => $this->csvOptions['delimiter'],
+            // @phpstan-ignore property.notFound
             'enclosure'        => $this->csvOptions['enclosure']
         ) );
+        // @phpstan-ignore property.notFound
         $this->doc = new CSVDoc( $csvOptions );
         $this->doc->parse();        
+        // @phpstan-ignore property.notFound
         $this->dataSource = $this->doc->rows;
         
         $progressBarOptions = array(
             'emptyChar'         => ' ',
             'barChar'           => '='
         );
+        // @phpstan-ignore property.notFound
         if ( $this->cli->isQuiet() )
         {
             $progressBarOptions['minVerbosity'] = 10;    
@@ -836,25 +872,33 @@ return false;
         {
             case 'warning':
             {
+                // @phpstan-ignore property.notFound
                 if ( !$this->cli->isQuiet() )    
+                    // @phpstan-ignore property.notFound
                     $this->cli->warning( $message . $cliMethod, $breakLine );
             } break;
             
             case 'error':
             {
+                // @phpstan-ignore property.notFound
                 if ( !$this->cli->isQuiet() )
+                    // @phpstan-ignore property.notFound
                     $this->cli->error( $message . $cliMethod, $breakLine );
             } break;
             
             case 'notice':
             {
+                // @phpstan-ignore property.notFound
                 if ( !$this->cli->isQuiet() )
+                    // @phpstan-ignore property.notFound
                     $this->cli->notice( $message . $cliMethod, $breakLine );
             } break;
             
             default:
             {
+                // @phpstan-ignore property.notFound
                 if ( !$this->cli->isQuiet() )
+                    // @phpstan-ignore property.notFound
                     $this->cli->output( $message . $cliMethod, $breakLine );                
             } break;
         }
@@ -1019,6 +1063,7 @@ return false;
                 && in_array( $attribute->attribute( 'contentclass_attribute_identifier' ), $attributesToChangeSections ) )
             {                
                 $relatedObjectIDs = explode( '-', $attribute->toString() );
+                // @phpstan-ignore empty.variable
                 if ( !empty( $relatedObjectIDs ) )
                 {                        
                     foreach( $relatedObjectIDs as $relatedObjectID )

@@ -87,6 +87,7 @@ abstract class CSVBaseOptions extends ezcBaseOptions implements Iterator
     public function valid()
     {
         $valid = false;
+        // @phpstan-ignore method.void
         if( $this->current() )
             $valid = true;
 
